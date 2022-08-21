@@ -57,9 +57,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <ExternalIncludePath>C:\Users\ycsto\source\repos\opengl_practice\opengl_practice\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\Users\ycsto\source\repos\opengl_practice\opengl_practice\lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>C:\Users\ycsto\source\repos\opengl_practice\opengl_practice\src;$(SourcePath)</SourcePath>
+    <ExternalIncludePath>..\opengl_practice\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>..\opengl_practice\lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
