@@ -32,10 +32,24 @@
     <ClCompile Include="common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="simple.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="simple.fs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,109 +1,100 @@
-#pragma once
-//#include "GL/glew.h"
-#include <glad/glad.h>
+#include "common.h"
+#include "shader.h"
+//#include "context.h"
 
-#include "GLFW/glfw3.h"
-#include <iostream>
+#define WINDOW_NAME "Triangle Example"
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
-//  #pragma comment(lib, "OpenGL32.lib")
-//  #pragma comment(lib, "lib/glew32.lib")
-//  #pragma comment(lib, "lib/glfw3.lib")
+void OnFramebufferSizeChange(GLFWwindow* window, int width, int height) {
+	SPDLOG_INFO("framebuffer size changed: ({} x {})", width, height);
+	glViewport(0, 0, width, height);
+}
 
-// #include <iostream>
-// const unsigned int SCR_WIDTH = 800;
-// const unsigned int SCR_HEIGHT = 600;
-// 
-// const char* vertexShaderSource = "#version 330 core\n"
-// "layout (location = 0) in vec3 aPos;\n"
-// "void main()\n"
-// "{\n"
-// "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-// "}\0";
-// const char* fragmentShaderSource = "#version 330 core\n"
-// "out vec4 FragColor;\n"
-// "void main()\n"
-// "{\n"
-// "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-// "}\n\0"; 
+void OnKeyEvent(GLFWwindow* window,
+	int key, int scancode, int action, int mods) {
+	SPDLOG_INFO("key: {}, scancode: {}, action: {}, mods: {}{}{}",
+		key, scancode,
+		action == GLFW_PRESS ? "Pressed" :
+		action == GLFW_RELEASE ? "Released" :
+		action == GLFW_REPEAT ? "Repeat" : "Unknown",
+		mods & GLFW_MOD_CONTROL ? "C" : "-",
+		mods & GLFW_MOD_SHIFT ? "S" : "-",
+		mods & GLFW_MOD_ALT ? "A" : "-");
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
+}
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+void Render() {
+	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
 
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+int main(int argc, const char** argv) {
+	// 시작을 알리는 로그
+	SPDLOG_INFO("Start program");
 
-int main()
-{
-	// glfw: initialize and configure
-	// ------------------------------
-	glfwInit();
+	// glfw 라이브러리 초기화, 실패하면 에러 출력후 종료
+	SPDLOG_INFO("Initialize glfw");
+	if (!glfwInit()) {
+		const char* description = nullptr;
+		glfwGetError(&description);
+		SPDLOG_ERROR("failed to initialize glfw: {}", description);
+		return -1;
+	}
+
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-	// glfw window creation
-	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+	// glfw 윈도우 생성, 실패하면 에러 출력후 종료
+	SPDLOG_INFO("Create glfw window");
+	auto window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME,
+		nullptr, nullptr);
+	if (!window) {
+		SPDLOG_ERROR("failed to create glfw window");
 		glfwTerminate();
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+	// glad를 활용한 OpenGL 함수 로딩
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+		SPDLOG_ERROR("failed to initialize glad");
+		glfwTerminate();
 		return -1;
 	}
+	auto glVersion = glGetString(GL_VERSION);
+	SPDLOG_INFO("OpenGL context version: {}", glVersion);
 
-	// render loop
-	// -----------
-	while (!glfwWindowShouldClose(window))
-	{
-		// input
-		// -----
-		processInput(window);
 
-		// render
-		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+	auto vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
+	auto fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+	SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
+	SPDLOG_INFO("fragment shader id: {}", fragmentShader->Get());
 
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
+	OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
+	glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
+	glfwSetKeyCallback(window, OnKeyEvent);
+
+	/*auto context = Context::Create();
+	if (!context) {
+		SPDLOG_ERROR("failed to create context");
+		glfwTerminate();
+		return -1;
+	}*/
+
+	// glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
+	SPDLOG_INFO("Start main loop");
+	while (!glfwWindowShouldClose(window)) {
+		//context->Render();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+	//context.reset();
 
-	// glfw: terminate, clearing all previously allocated GLFW resources.
-	// ------------------------------------------------------------------
 	glfwTerminate();
 	return 0;
-}
-
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow* window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
 }

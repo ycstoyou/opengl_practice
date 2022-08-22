@@ -8,6 +8,13 @@ ShaderUPtr Shader::CreateFromFile(const std::string& filename, GLenum shaderType
 		return nullptr;
 	return std::move(shader);//소유권 이전
 }
+
+Shader::~Shader() {
+	if (m_shader) {
+		glDeleteShader(m_shader);
+	}
+}
+
 bool Shader::LoadFile(const std::string& filename, GLenum shaderType) {
 	auto result = LoadTextFile(filename);
 	if (!result.has_value())

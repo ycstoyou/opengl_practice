@@ -100,10 +100,16 @@
   <ItemGroup>
     <ClCompile Include="common.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="src\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
+    <ClInclude Include="shader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="simple.fs" />
+    <None Include="simple.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
