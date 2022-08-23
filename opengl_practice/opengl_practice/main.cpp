@@ -1,5 +1,6 @@
 #include "common.h"
 #include "shader.h"
+#include "program.h"
 //#include "context.h"
 
 #define WINDOW_NAME "Triangle Example"
@@ -68,12 +69,24 @@ int main(int argc, const char** argv) {
 	}
 	auto glVersion = glGetString(GL_VERSION);
 	SPDLOG_INFO("OpenGL context version: {}", glVersion);
+	std::string s = fmt::format("The answer is {}.", 42);
+	// s == "The answer is 42."
+	fmt::print("{}\n", s);
+	spdlog::trace("Trace");
+	spdlog::debug("Debug");
+	spdlog::info("Support for floats {:03.2f}", 1.23456);
+	spdlog::warn("Easy padding in numbers like {:08d}", 12);
+	spdlog::error("Some error message with arg: {}", 1);
+	spdlog::critical("Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}", 42);
 
-
-	auto vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
-	auto fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+	ShaderPtr vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);//return type shader unique
+	ShaderPtr fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
 	SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
 	SPDLOG_INFO("fragment shader id: {}", fragmentShader->Get());
+
+
+	auto program = Program::Create({ fragmentShader, vertexShader });
+	printf("program id: {}", program->Get());
 
 	OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
