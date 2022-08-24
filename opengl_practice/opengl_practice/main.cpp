@@ -1,7 +1,5 @@
-#include "common.h"
-#include "shader.h"
-#include "program.h"
-//#include "context.h"
+
+#include "context.h"
 
 #define WINDOW_NAME "Triangle Example"
 #define WINDOW_WIDTH 640
@@ -31,22 +29,13 @@ void Render() {
 	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
-#include "spdlog/cfg/env.h"
-void load_levels_example()
-{
-	// Set the log level to "info" and mylogger to "trace":
-	// SPDLOG_LEVEL=info,mylogger=trace && ./example
-	spdlog::cfg::load_env_levels();
-	// or from command line:
-	// ./example SPDLOG_LEVEL=info,mylogger=trace
-	// #include "spdlog/cfg/argv.h" // for loading levels from argv
-	// spdlog::cfg::load_argv_levels(args, argv);
-}
+
+
 int main(int argc, const char** argv) {
 	// 시작을 알리는 로그
 	SPDLOG_INFO("Start program");
-	load_levels_example();
-	spdlog::info("Welcome to spdlog version {}.{}.{}  !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
+	
+	SPDLOG_INFO("Welcome to spdlog version {}.{}.{}  !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
 	// glfw 라이브러리 초기화, 실패하면 에러 출력후 종료
 	SPDLOG_INFO("Initialize glfw");
 	if (!glfwInit()) {
@@ -80,15 +69,15 @@ int main(int argc, const char** argv) {
 	}
 	auto glVersion = glGetString(GL_VERSION);
 	SPDLOG_INFO("OpenGL context version: {}", glVersion);
-	std::string s = fmt::format("The answer is {}.", 42);
+	
 	// s == "The answer is 42."
-	fmt::print("{}\n", s);
-	spdlog::trace("Trace");
-	spdlog::debug("Debug");
-	spdlog::info("Support for floats {:03.2f}", 1.23456);
-	spdlog::warn("Easy padding in numbers like {:08d}", 12);
-	spdlog::error("Some error message with arg: {}", 1);
-	spdlog::critical("Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}", 42);
+	auto context = Context::Create();
+	if (!context) {
+		SPDLOG_ERROR("failed to create context");
+		glfwTerminate();
+		return -1;
+	}
+	
 
 	ShaderPtr vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);//return type shader unique
 	ShaderPtr fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
@@ -113,11 +102,12 @@ int main(int argc, const char** argv) {
 	// glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
 	SPDLOG_INFO("Start main loop");
 	while (!glfwWindowShouldClose(window)) {
-		//context->Render();
+		context->Render();
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	//context.reset();
+	context.reset();
+	context = nullptr;
 
 	glfwTerminate();
 	return 0;
