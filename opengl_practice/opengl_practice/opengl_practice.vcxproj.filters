@@ -57,10 +57,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="simple.vs">
+    <None Include="shader\simple.fs">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="simple.fs">
+    <None Include="shader\simple.vs">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

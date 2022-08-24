@@ -122,8 +122,8 @@
     <ClInclude Include="shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="simple.fs" />
-    <None Include="simple.vs" />
+    <None Include="shader\simple.fs" />
+    <None Include="shader\simple.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

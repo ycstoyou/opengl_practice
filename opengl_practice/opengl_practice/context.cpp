@@ -11,8 +11,27 @@ ContextUPtr Context::Create()
 
 bool Context::Init()
 {
+	float vertices[] = {
+  -0.5f, -0.5f, 0.0f,
+  0.5f, -0.5f, 0.0f,
+  0.0f, 0.5f, 0.0f, };
+
+	glGenVertexArrays(1, &m_vertexArrayObject);
+	glBindVertexArray(m_vertexArrayObject);
+
+	glGenBuffers(1, &m_vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 9, vertices, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+	//입력에 대한 설명이 필요
+	//vertices의 내용에 대한 설명 glVertexAttribPointer함수에서 작성
+	
+
 	ShaderPtr vertShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
 	ShaderPtr fragShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+	
 	if (!vertShader || !fragShader)
 		return false;
 	SPDLOG_INFO("vertex shader id: {}", vertShader->Get());
@@ -25,17 +44,14 @@ bool Context::Init()
 
 	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 
-	uint32_t vao = 0;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
 	return true;
 }
 
 void Context::Render() 
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	glUseProgram(m_program->Get());
-	glDrawArrays(GL_POINTS, 0, 1);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 }

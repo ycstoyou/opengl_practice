@@ -77,6 +77,7 @@ int main(int argc, const char** argv) {
 		return -1;
 	}
 	
+
 	ShaderPtr vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);//return type shader unique
 	ShaderPtr fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
 	SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
@@ -84,7 +85,7 @@ int main(int argc, const char** argv) {
 
 
 	auto program = Program::Create({ fragmentShader, vertexShader });
-	
+	printf("program id: {}", program->Get());
 
 	OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
@@ -98,7 +99,7 @@ int main(int argc, const char** argv) {
 		glfwPollEvents();
 	}
 	context.reset();
-	context = nullptr;
+	//context = nullptr;
 
 	glfwTerminate();
 	return 0;
