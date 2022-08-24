@@ -31,11 +31,22 @@ void Render() {
 	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
-
+#include "spdlog/cfg/env.h"
+void load_levels_example()
+{
+	// Set the log level to "info" and mylogger to "trace":
+	// SPDLOG_LEVEL=info,mylogger=trace && ./example
+	spdlog::cfg::load_env_levels();
+	// or from command line:
+	// ./example SPDLOG_LEVEL=info,mylogger=trace
+	// #include "spdlog/cfg/argv.h" // for loading levels from argv
+	// spdlog::cfg::load_argv_levels(args, argv);
+}
 int main(int argc, const char** argv) {
 	// 시작을 알리는 로그
 	SPDLOG_INFO("Start program");
-
+	load_levels_example();
+	spdlog::info("Welcome to spdlog version {}.{}.{}  !", SPDLOG_VER_MAJOR, SPDLOG_VER_MINOR, SPDLOG_VER_PATCH);
 	// glfw 라이브러리 초기화, 실패하면 에러 출력후 종료
 	SPDLOG_INFO("Initialize glfw");
 	if (!glfwInit()) {
