@@ -45,7 +45,6 @@ int main(int argc, const char** argv) {
 		return -1;
 	}
 
-
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -78,7 +77,6 @@ int main(int argc, const char** argv) {
 		return -1;
 	}
 	
-
 	ShaderPtr vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);//return type shader unique
 	ShaderPtr fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
 	SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
@@ -86,18 +84,11 @@ int main(int argc, const char** argv) {
 
 
 	auto program = Program::Create({ fragmentShader, vertexShader });
-	printf("program id: {}", program->Get());
+	
 
 	OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
 	glfwSetKeyCallback(window, OnKeyEvent);
-
-	/*auto context = Context::Create();
-	if (!context) {
-		SPDLOG_ERROR("failed to create context");
-		glfwTerminate();
-		return -1;
-	}*/
 
 	// glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
 	SPDLOG_INFO("Start main loop");
