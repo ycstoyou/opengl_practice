@@ -115,6 +115,7 @@
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="vertex_layout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="buffer.h" />
@@ -122,6 +123,7 @@
     <ClInclude Include="context.h" />
     <ClInclude Include="program.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="vertex_layout.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\simple.fs" />
