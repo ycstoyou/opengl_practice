@@ -25,17 +25,20 @@ bool Context::Init()
 	glGenVertexArrays(1, &m_vertexArrayObject);
 	glBindVertexArray(m_vertexArrayObject);
 
-
-	glGenBuffers(1, &m_vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, vertices, GL_STATIC_DRAW);
+	m_vertexBuffer = Buffer::CreateWithData(GL_ARRAY_BUFFER, GL_STATIC_DRAW, vertices, sizeof(float) * 12);
+	
+	// 	glGenBuffers(1, &m_vertexBuffer);
+	// 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
+	// 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, vertices, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-
-	glGenBuffers(1, &m_indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * 6, indices, GL_STATIC_DRAW);
+	
+	m_indexBuffer = Buffer::CreateWithData(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW, indices, sizeof(uint32_t) * 6);
+	//m_indexBuffer = Buffer::CreateWithData(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW,indices, sizeof(uint32_t) * 6);
+// 	glGenBuffers(1, &m_indexBuffer);
+// 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+// 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint32_t) * 6, indices, GL_STATIC_DRAW);
 
 	//입력에 대한 설명이 필요
 	//vertices의 내용에 대한 설명 glVertexAttribPointer함수에서 작성
@@ -63,7 +66,8 @@ void Context::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glUseProgram(m_program->Get());
+	//glUseProgram(m_program->Get());
+	m_program->Use();
 	//glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
