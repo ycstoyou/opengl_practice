@@ -59,7 +59,7 @@ int main(int argc, const char** argv) {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-
+	//kllll
 	// glad를 활용한 OpenGL 함수 로딩
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		SPDLOG_ERROR("failed to initialize glad");
