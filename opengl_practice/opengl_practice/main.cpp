@@ -77,7 +77,7 @@ int main(int argc, const char** argv) {
 		return -1;
 	}
 	
-
+//fix
 	ShaderPtr vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);//return type shader unique
 	ShaderPtr fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
 	SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
