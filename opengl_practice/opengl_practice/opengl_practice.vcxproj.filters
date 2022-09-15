@@ -75,5 +75,11 @@
     <None Include="shader\simple.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="per_vertex_color.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\..\shader\per_vertex_color.vs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

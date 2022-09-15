@@ -126,6 +126,8 @@
     <ClInclude Include="vertex_layout.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shader\per_vertex_color.fs" />
+    <None Include="shader\per_vertex_color.vs" />
     <None Include="shader\simple.fs" />
     <None Include="shader\simple.vs" />
   </ItemGroup>
