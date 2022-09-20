@@ -46,7 +46,7 @@ void Image::SetCheckImage(int gridX, int gridY) {
 			uint8_t value = even ? 255 : 0;
 			for (int k = 0; k < m_channelCount; k++)
 				m_data[pos + k] = value;
-			if (m_channelCount > 3)//alpha chnnel 
+			if (m_channelCount > 3)
 				m_data[3] = 255;
 		}
 	}

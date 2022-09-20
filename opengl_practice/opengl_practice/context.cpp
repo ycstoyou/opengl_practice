@@ -85,23 +85,16 @@ bool Context::Init()
 	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 
 	//cpu
-	auto image = Image::Load("./image/container.jpg");
+	/*auto image = Image::Load("./image/container.jpg");
 	if (!image)
 		return false;
 	SPDLOG_INFO("image: {}x{}, {} channels",
-		image->GetWidth(), image->GetHeight(), image->GetChannelCount());
+		image->GetWidth(), image->GetHeight(), image->GetChannelCount());*/
 	//gpu
-	glGenTextures(1, &m_texture);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	//0 기본사이즈, 커질수록 작아짐
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-		image->GetWidth(), image->GetHeight(), 0,
-		GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
+	auto image = Image::Create(512, 512);
+	image->SetCheckImage(16, 16);
+	m_texture = Texture::CreateFromImage(image.get());
+	
 
 	return true;
 }

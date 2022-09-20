@@ -117,6 +117,7 @@
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="vertex_layout.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +128,7 @@
     <ClInclude Include="program.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="vertex_layout.h" />
   </ItemGroup>
   <ItemGroup>
