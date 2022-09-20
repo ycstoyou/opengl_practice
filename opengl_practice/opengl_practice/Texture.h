@@ -14,8 +14,7 @@ public:
 	void SetFilter(uint32_t minFilter, uint32_t magFilter) const;
 	void SetWrap(uint32_t sWrap, uint32_t tWrap) const;
 
-
-public:
+private:
 	Texture() {}
 	void CreateTexture();
 	void SetTextureFromImage(const Image* image);

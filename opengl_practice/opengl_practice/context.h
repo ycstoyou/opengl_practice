@@ -24,6 +24,7 @@ private:
 	BufferUPtr m_indexBuffer;
 	//uint32_t m_texture;
 	TextureUPtr m_texture;
+	TextureUPtr m_texture2;
 };
 
 #endif // __CONTEXT_H__

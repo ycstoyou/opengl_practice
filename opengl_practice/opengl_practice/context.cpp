@@ -12,21 +12,7 @@ ContextUPtr Context::Create()
 
 bool Context::Init()
 {
-	/*float vertices[] = {
-  0.5f, 0.5f, 0.0f, // top right
-  0.5f, -0.5f, 0.0f, // bottom right
-  -0.5f, -0.5f, 0.0f, // bottom left
-  -0.5f, 0.5f, 0.0f, // top left
-	};*/
 
-/*
-	float vertices[] = {
-	0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right, red
-	0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right, green
-	-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left, blue
-	-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, // top left, yellow
-	};
-*/
 
 	float vertices[] = {
 	  0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
@@ -40,11 +26,6 @@ bool Context::Init()
 	  1, 2, 3, // second triangle
 	};
 
-	/*m_vertexLayout = VertexLayout::Create();
-	m_vertexBuffer = Buffer::CreateWithData(GL_ARRAY_BUFFER, GL_STATIC_DRAW, vertices, sizeof(float) * 12);*/
-
-	/*m_vertexLayout = VertexLayout::Create();
-	m_vertexBuffer = Buffer::CreateWithData(GL_ARRAY_BUFFER, GL_STATIC_DRAW, vertices, sizeof(float) * 24);*/
 	m_vertexLayout = VertexLayout::Create();
 	m_vertexBuffer = Buffer::CreateWithData(		GL_ARRAY_BUFFER, GL_STATIC_DRAW,		vertices, sizeof(float) * 32);
 
@@ -52,17 +33,8 @@ bool Context::Init()
 	m_vertexLayout->SetAttrib(1, 3, GL_FLOAT, GL_FALSE,		sizeof(float) * 8, sizeof(float) * 3);
 	m_vertexLayout->SetAttrib(2, 2, GL_FLOAT, GL_FALSE,		sizeof(float) * 8, sizeof(float) * 6);
 
-	//m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-	/*m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE,	sizeof(float) * 6, 0);//위 배열의 모양에 대해 기술
-	m_vertexLayout->SetAttrib(1, 3, GL_FLOAT, GL_FALSE,	sizeof(float) * 6, sizeof(float) * 3);*/
 
 	m_indexBuffer = Buffer::CreateWithData(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW, indices, sizeof(uint32_t) * 6);
-
-	/*ShaderPtr vertShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
-	ShaderPtr fragShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);*/
-	
-	/*ShaderPtr vertShader = Shader::CreateFromFile("./shader/per_vertex_color.vs", GL_VERTEX_SHADER);
-	ShaderPtr fragShader = Shader::CreateFromFile("./shader/per_vertex_color.fs", GL_FRAGMENT_SHADER);*/
 
 	ShaderPtr vertShader = Shader::CreateFromFile("./shader/texture.vs", GL_VERTEX_SHADER);
 	ShaderPtr fragShader = Shader::CreateFromFile("./shader/texture.fs", GL_FRAGMENT_SHADER);
@@ -85,16 +57,28 @@ bool Context::Init()
 	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 
 	//cpu
-	/*auto image = Image::Load("./image/container.jpg");
+	auto image = Image::Load("./image/container.jpg");
+	m_texture = Texture::CreateFromImage(image.get());
 	if (!image)
 		return false;
-	SPDLOG_INFO("image: {}x{}, {} channels",
-		image->GetWidth(), image->GetHeight(), image->GetChannelCount());*/
+// 	SPDLOG_INFO("image: {}x{}, {} channels",
+// 		image->GetWidth(), image->GetHeight(), image->GetChannelCount());
 	//gpu
-	auto image = Image::Create(512, 512);
+	/*auto image = Image::Create(512, 512);
 	image->SetCheckImage(16, 16);
-	m_texture = Texture::CreateFromImage(image.get());
-	
+	m_texture = Texture::CreateFromImage(image.get());*/
+
+	auto image2 = Image::Load("./image/awesomeface.png");
+	m_texture2 = Texture::CreateFromImage(image2.get());
+
+	glActiveTexture(GL_TEXTURE0);//slot number
+	glBindTexture(GL_TEXTURE_2D, m_texture->Get());//바인딩
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_texture2->Get());
+
+	m_program->Use();
+	glUniform1i(glGetUniformLocation(m_program->Get(), "tex"), 0);//0번 슬롯의 texture를 사용
+	glUniform1i(glGetUniformLocation(m_program->Get(), "tex2"), 1);
 
 	return true;
 }
