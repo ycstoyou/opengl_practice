@@ -21,12 +21,12 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="image">
+      <UniqueIdentifier>{c392b402-c27c-4f30-9da4-85ed89481758}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="common.cpp">
@@ -47,11 +47,14 @@
     <ClCompile Include="vertex_layout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="common.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -67,6 +70,15 @@
     <ClInclude Include="vertex_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\simple.fs">
@@ -75,11 +87,27 @@
     <None Include="shader\simple.vs">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="per_vertex_color.vs">
+    <None Include="shader\per_vertex_color.fs">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\..\shader\per_vertex_color.vs">
+    <None Include="shader\per_vertex_color.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="shader\texture.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shader\texture.fs">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="opengl_practice.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\wall.jpg">
+      <Filter>image</Filter>
+    </Image>
   </ItemGroup>
 </Project>

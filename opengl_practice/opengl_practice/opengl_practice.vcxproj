@@ -71,6 +71,7 @@
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\opengl_practice\opengl_practice\opengl_practice\stb\stb-master;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -111,6 +112,7 @@
     <ClCompile Include="buffer.cpp" />
     <ClCompile Include="common.cpp" />
     <ClCompile Include="context.cpp" />
+    <ClCompile Include="image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="program.cpp" />
     <ClCompile Include="shader.cpp" />
@@ -121,7 +123,9 @@
     <ClInclude Include="buffer.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="context.h" />
+    <ClInclude Include="image.h" />
     <ClInclude Include="program.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="vertex_layout.h" />
   </ItemGroup>
@@ -130,6 +134,14 @@
     <None Include="shader\per_vertex_color.vs" />
     <None Include="shader\simple.fs" />
     <None Include="shader\simple.vs" />
+    <None Include="shader\texture.fs" />
+    <None Include="shader\texture.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="opengl_practice.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
