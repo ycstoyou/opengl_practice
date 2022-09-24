@@ -1,7 +1,7 @@
 
 #include "image.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb/stb_image.h"
 
 ImageUPtr Image::Load(const std::string & filepath) {
 	stbi_set_flip_vertically_on_load(true);

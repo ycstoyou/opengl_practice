@@ -57,7 +57,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <ExternalIncludePath>..\opengl_practice\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>E:\_git\opengl_practice\opengl_practice\opengl_practice\include;$(ExternalIncludePath)</ExternalIncludePath>
     <LibraryPath>..\opengl_practice\lib;$(LibraryPath)</LibraryPath>
     <SourcePath>..\opengl_practice\src;$(SourcePath)</SourcePath>
   </PropertyGroup>

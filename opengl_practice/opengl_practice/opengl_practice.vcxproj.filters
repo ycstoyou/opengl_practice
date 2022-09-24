@@ -24,6 +24,9 @@
     <Filter Include="image">
       <UniqueIdentifier>{c392b402-c27c-4f30-9da4-85ed89481758}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{e45004ae-ff70-4ceb-9f14-083b8f8738a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -88,22 +91,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\simple.fs">
-      <Filter>Source Files</Filter>
+      <Filter>shader</Filter>
     </None>
     <None Include="shader\simple.vs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="shader\per_vertex_color.fs">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="shader\per_vertex_color.vs">
-      <Filter>Source Files</Filter>
+      <Filter>shader</Filter>
     </None>
     <None Include="shader\texture.vs">
-      <Filter>Source Files</Filter>
+      <Filter>shader</Filter>
     </None>
     <None Include="shader\texture.fs">
-      <Filter>Source Files</Filter>
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\per_vertex_color.fs">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="shader\per_vertex_color.vs">
+      <Filter>shader</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
