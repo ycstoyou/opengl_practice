@@ -92,6 +92,9 @@ bool Context::Init()
 	// 확대 -> 회전 -> 평행이동 순으로 점에 선형 변환 적용
 	vec = trans * rot * scale * vec;
 	SPDLOG_INFO("transformed vec: [{}, {}, {}]", vec.x, vec.y, vec.z);*/
+
+
+/*
 	auto transform = glm::rotate(
 		glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)),
 		glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)
@@ -99,7 +102,20 @@ bool Context::Init()
 
 	auto transformLoc = glGetUniformLocation(m_program->Get(), "transform");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+*/
 
+	// x축으로 -55도 회전
+	auto model = glm::rotate(glm::mat4(1.0f),
+		glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	// 카메라는 원점으로부터 z축 방향으로 -3만큼 떨어짐
+	auto view = glm::translate(glm::mat4(1.0f),
+		glm::vec3(0.0f, 0.0f, -3.0f));
+	// 종횡비 4:3, 세로화각 45도의 원근 투영
+	auto projection = glm::perspective(glm::radians(45.0f),
+		(float)640 / (float)480, 0.01f, 10.0f);
+	auto transform = projection * view * model;
+	auto transformLoc = glGetUniformLocation(m_program->Get(), "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 	return true;
 }
 void Context::Render() {
