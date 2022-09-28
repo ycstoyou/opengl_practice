@@ -6,8 +6,12 @@
 #define WINDOW_HEIGHT 480
 
 void OnFramebufferSizeChange(GLFWwindow* window, int width, int height) {
+
+
 	SPDLOG_INFO("framebuffer size changed: ({} x {})", width, height);
-	glViewport(0, 0, width, height);
+	auto context = reinterpret_cast<Context*>(glfwGetWindowUserPointer(window));
+	context->Reshape(width, height);
+
 }
 
 void OnKeyEvent(GLFWwindow* window,
@@ -86,7 +90,9 @@ int main(int argc, const char** argv) {
 
 	auto program = Program::Create({ fragmentShader, vertexShader });
 	printf("program id: {}", program->Get());
-
+	
+	glfwSetWindowUserPointer(window, context.get());
+	
 	OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
 	glfwSetKeyCallback(window, OnKeyEvent);
@@ -94,6 +100,9 @@ int main(int argc, const char** argv) {
 	// glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
 	SPDLOG_INFO("Start main loop");
 	while (!glfwWindowShouldClose(window)) {
+		
+		glfwPollEvents();
+		context->ProcessInput(window);
 		context->Render();
 		glfwSwapBuffers(window);
 		glfwPollEvents();

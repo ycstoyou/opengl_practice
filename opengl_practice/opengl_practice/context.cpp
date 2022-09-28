@@ -143,7 +143,7 @@ bool Context::Init()
 		glm::vec3(0.0f, 0.0f, -3.0f));
 	// 종횡비 4:3, 세로화각 45도의 원근 투영
 	auto projection = glm::perspective(glm::radians(45.0f),
-		(float)640 / (float)480, 0.01f, 10.0f);
+		(float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.01f, 10.0f);
 	
 
 	auto transform = projection * view * model;
@@ -168,6 +168,31 @@ void Context::Render() {
 
 }
 */
+void Context::ProcessInput(GLFWwindow* window)
+{
+	const float cameraSpeed = 0.05f;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		m_cameraPos += cameraSpeed * m_cameraFront;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		m_cameraPos -= cameraSpeed * m_cameraFront;
+
+	auto cameraRight = glm::normalize(glm::cross(m_cameraUp, -m_cameraFront));
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		m_cameraPos += cameraSpeed * cameraRight;
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		m_cameraPos -= cameraSpeed * cameraRight;
+
+	auto cameraUp = glm::normalize(glm::cross(-m_cameraFront, cameraRight));
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		m_cameraPos += cameraSpeed * cameraUp;
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		m_cameraPos -= cameraSpeed * cameraUp;
+}
+void Context::Reshape(int width, int height) {
+	m_width = width;
+	m_height = height;
+	glViewport(0, 0, m_width, m_height);
+}
 
 void Context::Render() 
 {
@@ -189,25 +214,31 @@ void Context::Render()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 	auto projection = glm::perspective(glm::radians(45.0f),
-		(float)640 / (float)480, 0.01f, 20.0f);
+		(float)m_width / (float)m_height, 0.01f, 20.0f);
 
+/*
 	auto cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
 	auto cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	auto cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	auto cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);*/
 
-	auto cameraZ = glm::normalize(cameraPos - cameraTarget);
-	auto cameraX = glm::normalize(glm::cross(cameraUp, cameraZ));
-	auto cameraY = glm::cross(cameraZ, cameraX);
+// 	auto cameraZ = glm::normalize(cameraPos - cameraTarget);
+// 	auto cameraX = glm::normalize(glm::cross(cameraUp, cameraZ));
+// 	auto cameraY = glm::cross(cameraZ, cameraX);
+// 	auto cameraMat = glm::mat4(
+// 		glm::vec4(cameraX, 0.0f),
+// 		glm::vec4(cameraY, 0.0f),
+// 		glm::vec4(cameraZ, 0.0f),
+// 		glm::vec4(cameraPos, 1.0f));
+	//auto view = glm::inverse(cameraMat);
+	auto view = glm::lookAt(
+		m_cameraPos,
+		m_cameraPos + m_cameraFront,
+		m_cameraUp);
 
-	auto cameraMat = glm::mat4(
-		glm::vec4(cameraX, 0.0f),
-		glm::vec4(cameraY, 0.0f),
-		glm::vec4(cameraZ, 0.0f),
-		glm::vec4(cameraPos, 1.0f));
+	
 
-	auto view = glm::inverse(cameraMat);
-
-	for (size_t i = 0; i < cubePositions.size(); i++) {
+	for (size_t i = 0; i < cubePositions.size(); i++) 
+	{
 		auto& pos = cubePositions[i];
 		auto model = glm::translate(glm::mat4(1.0f), pos);
 		model = glm::rotate(model,
