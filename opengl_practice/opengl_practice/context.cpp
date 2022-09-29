@@ -54,14 +54,14 @@ bool Context::Init()
 	  16, 17, 18, 18, 19, 16,
 	  20, 22, 21, 22, 20, 23,
 	};
-	
+
 
 	m_vertexLayout = VertexLayout::Create();
-	m_vertexBuffer = Buffer::CreateWithData(		GL_ARRAY_BUFFER, GL_STATIC_DRAW,		vertices, sizeof(float) * 120);
+	m_vertexBuffer = Buffer::CreateWithData(GL_ARRAY_BUFFER, GL_STATIC_DRAW, vertices, sizeof(float) * 120);
 
-	m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE,		sizeof(float) * 5, 0);	
+	m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
 	//m_vertexLayout->SetAttrib(1, 3, GL_FLOAT, GL_FALSE,		sizeof(float) * 5, sizeof(float) * 3);
-	m_vertexLayout->SetAttrib(2, 2, GL_FLOAT, GL_FALSE,		sizeof(float) * 5, sizeof(float) * 3);
+	m_vertexLayout->SetAttrib(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, sizeof(float) * 3);
 
 
 	m_indexBuffer = Buffer::CreateWithData(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW, indices, sizeof(uint32_t) * 36);
@@ -91,12 +91,12 @@ bool Context::Init()
 	m_texture = Texture::CreateFromImage(image.get());
 	if (!image)
 		return false;
-// 	SPDLOG_INFO("image: {}x{}, {} channels",
-// 		image->GetWidth(), image->GetHeight(), image->GetChannelCount());
-	//gpu
-	/*auto image = Image::Create(512, 512);
-	image->SetCheckImage(16, 16);
-	m_texture = Texture::CreateFromImage(image.get());*/
+	// 	SPDLOG_INFO("image: {}x{}, {} channels",
+	// 		image->GetWidth(), image->GetHeight(), image->GetChannelCount());
+		//gpu
+		/*auto image = Image::Create(512, 512);
+		image->SetCheckImage(16, 16);
+		m_texture = Texture::CreateFromImage(image.get());*/
 
 	auto image2 = Image::Load("./image/awesomeface.png");
 	m_texture2 = Texture::CreateFromImage(image2.get());
@@ -106,35 +106,12 @@ bool Context::Init()
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_texture2->Get());
 
-	
+
 	m_program->Use();
 	m_program->SetUniform("tex", 0);
 	m_program->SetUniform("tex2", 1);
 
-	/*// 위치 (1, 0, 0)의 점. 동차좌표계 사용
-	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	// 단위행렬 기준 (1, 1, 0)만큼 평행이동하는 행렬
-	auto trans = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-	// 단위행렬 기준 z축으로 90도만큼 회전하는 행렬
-	auto rot = glm::rotate(glm::mat4(1.0f),
-		glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	// 단위행렬 기준 모든 축에 대해 3배율 확대하는 행렬
-	auto scale = glm::scale(glm::mat4(1.0f), glm::vec3(3.0f));
-	// 확대 -> 회전 -> 평행이동 순으로 점에 선형 변환 적용
-	vec = trans * rot * scale * vec;
-	SPDLOG_INFO("transformed vec: [{}, {}, {}]", vec.x, vec.y, vec.z);*/
-
-
-/*
-	auto transform = glm::rotate(
-		glm::scale(glm::mat4(1.0f), glm::vec3(0.5f)),
-		glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)
-	);
-
-	auto transformLoc = glGetUniformLocation(m_program->Get(), "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
-*/
-
+	
 	// x축으로 -55도 회전
 	auto model = glm::rotate(glm::mat4(1.0f),
 		glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -144,32 +121,19 @@ bool Context::Init()
 	// 종횡비 4:3, 세로화각 45도의 원근 투영
 	auto projection = glm::perspective(glm::radians(45.0f),
 		(float)WINDOW_WIDTH / (float)WINDOW_HEIGHT, 0.01f, 10.0f);
-	
+
 
 	auto transform = projection * view * model;
 	m_program->SetUniform("transform", transform);
-	/*auto transformLoc = glGetUniformLocation(m_program->Get(), "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));*/
+	
 	return true;
 }
-/*
-void Context::Render() {
-	glClear(GL_COLOR_BUFFER_BIT);
 
-	static float time = 0.0f;
-	float t = sinf(time) * 0.5f + 0.5f;
-	auto loc = glGetUniformLocation(m_program->Get(), "color");
-	m_program->Use();
-	glUniform4f(loc, t * t, 2.0f * t * (1.0f - t), (1.0f - t) * (1.0f - t), 1.0f);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	time += 0.016f;
-
-
-}
-*/
 void Context::ProcessInput(GLFWwindow* window)
 {
+	if (!m_cameraControl)
+		return;
+
 	const float cameraSpeed = 0.05f;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		m_cameraPos += cameraSpeed * m_cameraFront;
@@ -194,7 +158,40 @@ void Context::Reshape(int width, int height) {
 	glViewport(0, 0, m_width, m_height);
 }
 
-void Context::Render() 
+void Context::MouseMove(double x, double y)
+{
+	if (!m_cameraControl)
+		return;
+
+	//auto pos = glm::vec2((float)x, (float)y);
+	auto pos = glm::vec2((float)x, (float)y);
+	auto deltaPos = pos - m_prevMousePos;
+		
+	const float cameraRotSpeed = 0.1f;
+	m_cameraYaw -= deltaPos.x * cameraRotSpeed;
+	m_cameraPitch -= deltaPos.y * cameraRotSpeed;
+
+	if (m_cameraYaw < 0.0f)   m_cameraYaw += 360.0f;
+	if (m_cameraYaw > 360.0f) m_cameraYaw -= 360.0f;
+
+	if (m_cameraPitch > 89.0f)  m_cameraPitch = 89.0f;
+	if (m_cameraPitch < -89.0f) m_cameraPitch = -89.0f;
+
+	m_prevMousePos = pos;
+}
+void Context::MouseButton(int button, int action, double x, double y) {
+	if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+		if (action == GLFW_PRESS) {
+			// 마우스 조작 시작 시점에 현재 마우스 커서 위치 저장
+			m_prevMousePos = glm::vec2((float)x, (float)y);
+			m_cameraControl = true;
+		}
+		else if (action == GLFW_RELEASE) {
+			m_cameraControl = false;
+		}
+	}
+}
+void Context::Render()
 {
 
 	std::vector<glm::vec3> cubePositions = {
@@ -213,31 +210,23 @@ void Context::Render()
 	//glClear(GL_COLOR_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+
+	m_cameraFront =
+		glm::rotate(glm::mat4(1.0f),glm::radians(m_cameraYaw), glm::vec3(0.0f, 1.0f, 0.0f)) *glm::rotate(glm::mat4(1.0f),
+			glm::radians(m_cameraPitch), glm::vec3(1.0f, 0.0f, 0.0f)) *	glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+
 	auto projection = glm::perspective(glm::radians(45.0f),
 		(float)m_width / (float)m_height, 0.01f, 20.0f);
 
-/*
-	auto cameraPos = glm::vec3(3.0f, 3.0f, 3.0f);
-	auto cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-	auto cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);*/
 
-// 	auto cameraZ = glm::normalize(cameraPos - cameraTarget);
-// 	auto cameraX = glm::normalize(glm::cross(cameraUp, cameraZ));
-// 	auto cameraY = glm::cross(cameraZ, cameraX);
-// 	auto cameraMat = glm::mat4(
-// 		glm::vec4(cameraX, 0.0f),
-// 		glm::vec4(cameraY, 0.0f),
-// 		glm::vec4(cameraZ, 0.0f),
-// 		glm::vec4(cameraPos, 1.0f));
-	//auto view = glm::inverse(cameraMat);
 	auto view = glm::lookAt(
 		m_cameraPos,
 		m_cameraPos + m_cameraFront,
 		m_cameraUp);
 
-	
 
-	for (size_t i = 0; i < cubePositions.size(); i++) 
+
+	for (size_t i = 0; i < cubePositions.size(); i++)
 	{
 		auto& pos = cubePositions[i];
 		auto model = glm::translate(glm::mat4(1.0f), pos);

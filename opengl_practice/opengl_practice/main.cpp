@@ -1,6 +1,13 @@
 
 #include "context.h"
-
+/*
+#include "dcmtk/dcmdata/dcfilefo.h"
+#include "dcmtk/dcmdata/dcdeftag.h"
+#include "dcmtk/dcmimgle/dcmimage.h"
+#include "dcmtk/dcmfg/fginterface.h"
+#include "dcmtk/dcmfg/fgbase.h"
+#include "dcmtk/dcmfg/fgplanpo.h"*/
+#include "LoadDicom.h"
 #define WINDOW_NAME "Triangle Example"
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
@@ -33,8 +40,24 @@ void Render() {
 	glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
+void OnCursorPos(GLFWwindow* window, double x, double y) {
+	auto context = (Context*)glfwGetWindowUserPointer(window);
+	context->MouseMove(x, y);
+}
+void OnMouseButton(GLFWwindow* window, int button, int action, int modifier) {
+	auto context = (Context*)glfwGetWindowUserPointer(window);
+	double x, y;
+	glfwGetCursorPos(window, &x, &y);
+	context->MouseButton(button, action, x, y);
+}
+int main(int argc, const char** argv)
+{
+	LoadDicom dicom;
+	dicom.openDicom();
 
+}
 
+/*
 int main(int argc, const char** argv) {
 	// 시작을 알리는 로그
 	SPDLOG_INFO("Start program");
@@ -96,7 +119,8 @@ int main(int argc, const char** argv) {
 	OnFramebufferSizeChange(window, WINDOW_WIDTH, WINDOW_HEIGHT);
 	glfwSetFramebufferSizeCallback(window, OnFramebufferSizeChange);
 	glfwSetKeyCallback(window, OnKeyEvent);
-
+	glfwSetCursorPosCallback(window, OnCursorPos);
+	glfwSetMouseButtonCallback(window, OnMouseButton);
 	// glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
 	SPDLOG_INFO("Start main loop");
 	while (!glfwWindowShouldClose(window)) {
@@ -113,3 +137,4 @@ int main(int argc, const char** argv) {
 	glfwTerminate();
 	return 0;
 }
+*/
